@@ -1,0 +1,55 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+    echo "Usage: addwebapp [app_name]"
+    exit
+fi
+
+APP_NAME=$1
+BARE_REPO_BASE_DIR="/var/git"
+BARE_REPO_DIR="$BARE_REPO_BASE_DIR/$APP_NAME"
+APP_BASE_DIR="/var/webapps"
+APP_DIR="$APP_BASE_DIR/$APP_NAME"
+
+CUR_DIR=`pwd`
+
+if [ -d $APP_DIR ]; then
+    echo "It seems that this application is already created. If you wan't to recreate it please remove '$APP_DIR' direction and run this script again."
+fi
+
+echo "Creating application '$APP_NAME'..."
+
+if [ ! -d $BARE_REPO_BASE_DIR ]; then
+    echo "Creating '$BARE_REPO_BASE_DIR' folder..."
+    sudo mkdir -p $BARE_REPO_BASE_DIR
+    sudo chown $USER: -R $BARE_REPO_BASE_DIR
+fi
+
+if [ ! -d $BARE_REPO_DIR ]; then
+    echo "Creating '$BARE_REPO_DIR' folder..."
+    mkdir -p $BARE_REPO_DIR
+
+    echo "Initializing bare repository..."
+    cd $BARE_REPO_DIR
+    git init --bare
+fi
+
+if [ ! -d $APP_BASE_DIR ]; then
+    echo "Creating '$APP_BASE_DIR' folder..."
+    sudo mkdir -p $APP_BASE_DIR
+    sudo chown $USER: -R $APP_BASE_DIR
+fi
+
+if [ ! -d $APP_DIR ]; then
+    echo "Cloning into '$BARE_REPO_DIR' folder at '$APP_BASE_DIR' path..."
+    cd $APP_BASE_DIR
+    git clone $BARE_REPO_DIR
+fi
+
+echo "Creating init.d script..."
+cd $CUR_DIR
+sudo sh -c "sed 's/%APP_NAME%/$APP_NAME/g' play-init-script > /etc/init.d/play-$APP_NAME"
+sudo chmod +x /etc/init.d/play-$APP_NAME
+sudo update-rc.d play-$APP_NAME defaults
+
+echo "Done."

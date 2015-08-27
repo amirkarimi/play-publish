@@ -1,0 +1,42 @@
+#!/bin/sh
+
+APP_NAME="[app-name]"
+REMOTE_HOST="[ip or host]"
+REMOTE_PORT="22"
+REMOTE_USER="[user]"
+
+LOCAL_GIT_BASE_DIR="/var/git"
+TARGET="$LOCAL_GIT_BASE_DIR/$APP_NAME-publish"
+CUR_PATH=`pwd`
+REMOTE="ssh://$REMOTE_USER@$REMOTE_HOST:$REMOTE_PORT/var/git/$APP_NAME"
+
+activator clean stage
+
+if [ ! -d $LOCAL_GIT_BASE_DIR ]; then
+    sudo mkdir -p $LOCAL_GIT_BASE_DIR
+    sudo chown $USER:$USER $GIT_BASE_DIR
+fi
+
+if [ ! -d $TARGET ]; then
+    mkdir -p $TARGET
+    if [ "$?" -ne 0 ]; then echo "Create target directory at ${TARGET} failed."; exit 1; fi
+    cd $TARGET
+    git init
+    echo "Add remote website $REMOTE"
+    git remote add website $REMOTE
+    cd $CUR_PATH
+fi
+
+cp -R ./target/universal/stage/* $TARGET"/"
+if [ "$?" -ne 0 ]; then echo "Copy failed."; exit 1; fi
+
+cd $TARGET
+
+git add .
+git commit -a -m "Committed by script."
+git push --force website master
+
+#if [ "$?" -ne 0 ]; then echo "Pushing to website faild."; exit 1; fi
+ssh $REMOTE_USER@$REMOTE_HOST -p$REMOTE_PORT "cd /var/webapps/$APP_NAME; git fetch origin; git reset --hard origin/master; service play-$APP_NAME restart"
+
+cd $CUR_PATH

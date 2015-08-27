@@ -1,0 +1,18 @@
+#!/bin/sh
+
+APP_NAME=$1
+BARE_REPO_BASE_DIR="/var/git"
+BARE_REPO_DIR="$BARE_REPO_BASE_DIR/$APP_NAME"
+APP_BASE_DIR="/var/webapps"
+APP_DIR="$APP_BASE_DIR/$APP_NAME"
+
+if [ -z "$1" ]; then
+    echo "Usage: rmwebapp [app_name]"
+    exit
+fi
+
+sudo rm -R $BARE_REPO_DIR
+sudo rm -R $APP_DIR
+sudo rm /etc/init.d/play-$APP_NAME
+
+echo "Done."
