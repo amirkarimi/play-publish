@@ -11,7 +11,7 @@ I used these bash scripts to publish a Play application in a single step. Before
 Before everything we need the following packages to be installed on server side:
 
 * git
-* jre 8+
+* JRE 6+ (8+ is required if you use Play 2.4+)
 
 ### Copying the files
 You need to copy the following files to the server:
