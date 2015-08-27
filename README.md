@@ -4,7 +4,7 @@ Scripts and guides to publish a Play application on a Linux server
 
 I used these bash scripts to publish a Play application in a single step. Before we can use the one-step publish script we have to prepare the server and development machines.
 
-> The scripts and commands are written and tested against Ubuntu
+> The scripts and commands are written and tested against Ubuntu 14.04
 
 ## Server Side
 
