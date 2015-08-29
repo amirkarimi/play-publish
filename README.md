@@ -49,7 +49,7 @@ APP_ARGS="-Dhttp.port=[port-no]"
 You can remove the previously setup web app by copying `rmwebapp` file to the server and running the following command:
 
 ```bash
-./addwebapp [your-app-name]
+./rmwebapp [your-app-name]
 ```
 
 ## Development Side
