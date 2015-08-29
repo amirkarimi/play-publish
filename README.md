@@ -1,6 +1,6 @@
 # Play Publish
 
-Scripts and guides to publish a Play application on a Linux server
+Scripts and guides to automatically build and publish a Play application binaries on a Linux server
 
 I used these bash scripts to publish a Play application in a single step. Before we can use the one-step publish script we have to prepare the server and development machines.
 
