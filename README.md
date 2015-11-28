@@ -18,7 +18,7 @@ You need to copy the following files to the server:
 
 * addwebapp
 * play-init-script
-* addwebapp
+* rmwebapp
 
 Make sure that `addwebapp` and `play-init-script` are in the same directory. 
 
